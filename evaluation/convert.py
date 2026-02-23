@@ -15,7 +15,8 @@ class QiskitBuilder:
             "SWAP": self.swapgate,
             "S": self.sgate,
             "CS": self.cs,
-            "CP": self.cp,
+            "CP4": self.cp4,
+            "CP8": self.cp8,
         }
         
     # class methods:
@@ -24,7 +25,7 @@ class QiskitBuilder:
         
     # add error for unknown gate?
         
-    def build(self):
+    def build(self) -> QuantumCircuit:
         for gate in self.circuit.circuit:
             self.gates[gate.name](gate.wires)
         
@@ -48,8 +49,11 @@ class QiskitBuilder:
     def cs(self, wires: list[int]):
         self.qc.cs(wires[0], wires[1])
         
-    def cp(self, wires: list[int]):
+    def cp4(self, wires: list[int]):
         self.qc.cp(np.pi/4, wires[0], wires[1])
+        
+    def cp8(self, wires: list[int]):
+        self.qc.cp(np.pi/8, wires[0], wires[1])
 
 # call fitness on whole population - 
 # take in a given circuit

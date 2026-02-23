@@ -12,7 +12,8 @@ test_features.py
 data/*
 
 # Plot files
-plot/*
+plots/*
+savedplots/*
 
 # Other
 notes.txt

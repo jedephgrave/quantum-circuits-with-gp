@@ -1,5 +1,6 @@
 from .gate import Gate
 import copy
+from qiskit import QuantumCircuit
 
 class Circuit:
     
@@ -7,6 +8,8 @@ class Circuit:
         self.circuit = circuit
         self.length = len(circuit)
         self.num_wires = num_wires
+        
+        self.qiskit_representation = None
         
     def add_gate(self, gate: Gate):
         self.circuit.append(gate)
@@ -77,6 +80,14 @@ class Circuit:
         for _ in range(index, index + num_removals):
             self.circuit.pop(index)
             self.length -= 1
+            
+    @property
+    def qiskit_representation(self) -> QuantumCircuit:
+        return self._qiskit_representation
+    
+    @qiskit_representation.setter
+    def qiskit_representation(self, qiskit_representation: QuantumCircuit):
+        self._qiskit_representation = qiskit_representation
             
     def copy(self) -> "Circuit":
         return copy.deepcopy(self)

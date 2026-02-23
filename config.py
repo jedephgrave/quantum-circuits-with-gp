@@ -3,7 +3,8 @@ from circuit import Gate
 GATE_SET = [
     Gate('H', 1, 0),   
     Gate('CS', 2, 0),
-    Gate('CP', 2, 0),
+    Gate('CP4', 2, 0),
+    Gate('CP8', 2, 0),
     Gate('X', 1, 0),
     Gate('SWAP', 2, 0),
 ]
@@ -16,15 +17,15 @@ SPARE_GATE_SET = [
     Gate('SWAP', 2, 0),
 ]
 
-NUM_WIRES = 3
+NUM_WIRES = 2
 
 # gp hyperparameters go here 
 POPULATION_SIZE = 300
 
 ELITE_COUNT = 3
 
-INITIAL_SIZE = {'max': 6,
-                'min': 5
+INITIAL_SIZE = {'max': 4,
+                'min': 3
                 }
 
 # maybe add a max insertion size for the chunks?
@@ -58,9 +59,11 @@ check_prob = (sum(PROB_DICT.values()) == 1)
     
 # gp variables
 
-NUM_GENERATIONS = 150
+NUM_GENERATIONS = 40
 
 TOURNAMENT_SIZE = 6
 
+# bloat control values
 
+PARSIMONY_CONSTANT = 0
 

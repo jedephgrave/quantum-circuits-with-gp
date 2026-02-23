@@ -4,7 +4,7 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 
-important = ['000', '001', '010', '011', '100', '101', '110', '111', '+++', '+00', '0+0', '00+']
+#important = ['000', '001', '010', '011', '100', '101', '110', '111', '+++', '+00', '0+0', '00+']
 
 
 # ----------------------------------
@@ -47,9 +47,33 @@ def build_qft_3():
     qc.h(1)
     qc.cp(np.pi/2,2,1)
     qc.h(2)
-    #qc.swap(0,2)
+    qc.swap(0,2)
 
     print(qc)
+    return qc
+
+def build_qft_4():
+    qc = QuantumCircuit(4)
+    
+    qc.h(0)
+    qc.cp(np.pi/2,1,0)
+    qc.cp(np.pi/4, 2, 0)
+    qc.cp(np.pi/8, 3, 0)
+    
+    qc.h(1)
+    qc.cp(np.pi/2, 2, 1)
+    qc.cp(np.pi/4, 3, 1)
+    
+    qc.h(2)
+    qc.cp(np.pi/2, 3, 2)
+    
+    qc.h(3)
+    
+    qc.swap(0, 3)
+    qc.swap(1, 2)
+    
+    print(qc)
+    
     return qc
 # ----------------------------------
 # 2. Generate random unique inputs
@@ -80,15 +104,22 @@ def generate_random_inputs(n_qubits, n_inputs):
 # 3. Generate dataset
 # ----------------------------------
 def generate_qft_dataset(
-    n_qubits=2,
-    n_inputs=10,
+    n_qubits,
+    n_inputs,
     output_csv="qft_dataset.csv"
 ):
-    qc = build_qft_3()
+    
+    type_dict = {
+        2: build_qft_2,
+        3: build_qft_3,
+        4: build_qft_4,
+    }
+    
+    qc = type_dict[n_qubits]()
 
     inputs = generate_random_inputs(n_qubits, n_inputs)
     
-    inputs += important
+    #inputs += important
 
     rows = []
     for label in inputs:
@@ -116,7 +147,7 @@ def generate_qft_dataset(
 # ----------------------------------
 if __name__ == "__main__":
     generate_qft_dataset(
-        n_qubits=3,      # ← change this freely
+        n_qubits=2,      # ← change this freely
         n_inputs=8,     # ← change this freely
         output_csv="data/test_data.csv"
     )
