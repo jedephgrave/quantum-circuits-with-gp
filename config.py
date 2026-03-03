@@ -17,15 +17,15 @@ SPARE_GATE_SET = [
     Gate('SWAP', 2, 0),
 ]
 
-NUM_WIRES = 2
+NUM_WIRES = 4
 
 # gp hyperparameters go here 
-POPULATION_SIZE = 300
+POPULATION_SIZE = 400
 
-ELITE_COUNT = 3
+ELITE_COUNT = 4
 
-INITIAL_SIZE = {'max': 4,
-                'min': 3
+INITIAL_SIZE = {'max': 9,
+                'min': 8
                 }
 
 # maybe add a max insertion size for the chunks?
@@ -59,11 +59,11 @@ check_prob = (sum(PROB_DICT.values()) == 1)
     
 # gp variables
 
-NUM_GENERATIONS = 40
+NUM_GENERATIONS = 200
 
 TOURNAMENT_SIZE = 6
 
 # bloat control values
 
-PARSIMONY_CONSTANT = 0
+PARSIMONY_CONSTANT = 0.001 # change to 2/3
 

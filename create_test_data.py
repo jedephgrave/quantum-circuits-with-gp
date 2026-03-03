@@ -7,25 +7,6 @@ from qiskit.quantum_info import Statevector
 #important = ['000', '001', '010', '011', '100', '101', '110', '111', '+++', '+00', '0+0', '00+']
 
 
-# ----------------------------------
-# 1. Build an n-qubit QFT circuit
-# ----------------------------------
-"""
-def build_qft(n_qubits, do_swaps=True):
-    qc = QuantumCircuit(n_qubits)
-
-    for j in range(n_qubits):
-        qc.h(j)
-        for k in range(j + 1, n_qubits):
-            qc.cp(np.pi / (2 ** (k - j)), k, j)
-
-    if do_swaps:
-        for i in range(n_qubits // 2):
-            qc.swap(i, n_qubits - i - 1)
-
-    return qc
-""" 
-
 def build_qft_2():
     qc = QuantumCircuit(2)
     
@@ -75,9 +56,7 @@ def build_qft_4():
     print(qc)
     
     return qc
-# ----------------------------------
-# 2. Generate random unique inputs
-# ----------------------------------
+
 def generate_random_inputs(n_qubits, n_inputs):
     """
     Generate unique labels like:
@@ -100,9 +79,6 @@ def generate_random_inputs(n_qubits, n_inputs):
     return random.sample(all_possible, n_inputs)
 
 
-# ----------------------------------
-# 3. Generate dataset
-# ----------------------------------
 def generate_qft_dataset(
     n_qubits,
     n_inputs,
@@ -142,12 +118,10 @@ def generate_qft_dataset(
     )
 
 
-# ----------------------------------
-# 4. Run
-# ----------------------------------
+
 if __name__ == "__main__":
     generate_qft_dataset(
-        n_qubits=2,      # ← change this freely
-        n_inputs=8,     # ← change this freely
+        n_qubits=4,      
+        n_inputs=30,    
         output_csv="data/test_data.csv"
     )

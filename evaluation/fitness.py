@@ -48,9 +48,9 @@ class CircuitFitness:
             
         fitness = total/count
         
-        adjusted_fitness = parsimony_pressure(fitness, circuit)
+        fitness = parsimony_pressure(fitness, circuit)
         
-        return adjusted_fitness
+        return fitness
       
     def makefitness(self, data: list[list[str], np.array]):
         # self.inputqubits = inputqubits
@@ -69,10 +69,16 @@ def fidelity_evaluation(expected, output_state):
     return fidelity # sqrt just to change briefly
 
 def parsimony_pressure(fitness: float, circuit: Circuit):
-    constant = PARSIMONY_CONSTANT
-    circuit_length = circuit.length
     
-    return fitness - (constant * circuit_length)
+    adjustment = PARSIMONY_CONSTANT * circuit.length
+    
+    if adjustment > fitness:
+        print("yep")
+    
+    # adjust fitness and avoid negatives
+    adjusted_fitness = fitness-adjustment if fitness > adjustment else fitness 
+    
+    return adjusted_fitness
     
 def test_evaluation(expected, output_state):
     candidate = output_state.data

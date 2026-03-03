@@ -13,15 +13,18 @@ y4 = df.iloc[:, 4]
 plt.figure()
 plt.plot(x, y1, label="Average")
 plt.plot(x, y2, label="Best")
-plt.plot(x, y3, label="Num Success")
+#plt.plot(x, y3, label="Num Success")
 
+plt.title("Fitness change through generations")
 plt.xlabel("Generation")
-plt.ylabel("values")
+plt.ylabel("Fitness")
 plt.legend()
 plt.savefig('plots/fitness_plot.png')
 
 plt.figure()
 plt.plot(x, y4, label="Average circuit length")
+
+plt.title("Mean circuit size through generations")
 plt.xlabel("Generation")
 plt.ylabel("Average circuit size")
 plt.legend()
