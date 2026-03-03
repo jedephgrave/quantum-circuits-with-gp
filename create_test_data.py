@@ -121,7 +121,7 @@ def generate_qft_dataset(
 
 if __name__ == "__main__":
     generate_qft_dataset(
-        n_qubits=4,      
-        n_inputs=30,    
+        n_qubits=3,      
+        n_inputs=20,    
         output_csv="data/test_data.csv"
     )

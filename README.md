@@ -1,24 +1,27 @@
 ### Automatic design of quantum circuits with genetic programming
 
-Currently at a prototyped version - evolves a two qubit bell state
+Able to evolve an appropriately sized 3 qubit quantum fourier transform circuit 
+(7 Gates)
 
-**Current setup is fairly novel, includes functionality for:**
-- Tournament selection
-- Crossover 
-- Mutation 
+**Current setup includes functionality for:**
+- Tournament selection (with elitism)
+- Crossover, Insertion
+- Mutation, Wire mutation
+- Insertion and Shrink mutation
+- Parismony pressure 
 
 **Specifics of the genetic program can be tweaked in config.py, such as:**
 - Gate set
-- Initial solution sizes 
-- Number of wires
-- Number of evaluation and population size
-- Ideal results
+- Initial solution size, population size and elite count
+- Probability of given operations occuring, with size details for insertion and shrinking
+- Selection parameters and parimony constant for bloat
+
+**Information for data collection**
+- Build dataset for goal circuit - *create_test_data.py*
+- Create simple plots (showing solution fitness and solution size through the run) - *create_plots.py*
 
 **To be added:**
-- Specific cases of inputs and desired outputs
-- Variations of genetic operators (insertion, multiple gate mutation, etc)
-- Varying types of selection
-- Multi objective functionality to be developed 
+- Multi objective functionality to be developed (for noise resiliency)
 
 
 
