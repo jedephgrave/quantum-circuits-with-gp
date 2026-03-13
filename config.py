@@ -4,7 +4,6 @@ GATE_SET = [
     Gate('H', 1, 0),   
     Gate('CS', 2, 0),
     Gate('CP4', 2, 0),
-    Gate('CP8', 2, 0),
     Gate('X', 1, 0),
     Gate('SWAP', 2, 0),
 ]
@@ -15,17 +14,23 @@ SPARE_GATE_SET = [
     Gate('CN', 2, 0),
     Gate('S', 1, 0),
     Gate('SWAP', 2, 0),
+    Gate('CP8', 2, 0),
 ]
 
-NUM_WIRES = 4
+NUM_WIRES = 3
 
 # gp hyperparameters go here 
-POPULATION_SIZE = 400
+POPULATION_SIZE = 300
+NUM_GENERATIONS = 150
+
+TOURNAMENT_SIZE = int(0.02 * POPULATION_SIZE)
 
 ELITE_COUNT = 4
 
-INITIAL_SIZE = {'max': 9,
-                'min': 8
+
+# INCREASE THE RANGE OF THIS?
+INITIAL_SIZE = {'max': 10,
+                'min': 6
                 }
 
 # maybe add a max insertion size for the chunks?
@@ -39,10 +44,10 @@ MUTANT_SHRINK_SIZE = {'max': 2,
 
 PROB_DICT = {'crossover' : 0.50,
              'insertion': 0.0,
-             'mutation': 0.1,
+             'mutation': 0.05,
              'wire_mutation': 0.4,
              'insert_mutation': 0.0,
-             'shrink_mutation': 0.0
+             'shrink_mutation': 0.05
              }
 
 CUMULATIVE_PROB = dict()
@@ -56,14 +61,21 @@ def build_cumulative_prob():
 # ensure to run this before gp begins run
 check_prob = (sum(PROB_DICT.values()) == 1)
     
-    
-# gp variables
 
-NUM_GENERATIONS = 200
+# data creation
 
-TOURNAMENT_SIZE = 6
+NUMBER_INPUTS = 30
+
+# evaluation variables
+
+SUBSET_PROPORTION = 0.4
+SUBSET_SIZE = int(SUBSET_PROPORTION * NUMBER_INPUTS)
 
 # bloat control values
 
-PARSIMONY_CONSTANT = 0.001 # change to 2/3
+PARSIMONY_CONSTANT = 0.0035 # change to 0.003
+
+NOISE_RESILIENCE = False
+
+SUCCESS_VALUE = round((NUMBER_INPUTS - 1) / NUMBER_INPUTS, 5)
 

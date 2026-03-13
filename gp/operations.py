@@ -23,6 +23,8 @@ def selection(population: Population):
             
     return best_circuit
 
+
+
 # for minimising fitness function - depends on it
 # LEGACY
 def selection_min(population: Population):

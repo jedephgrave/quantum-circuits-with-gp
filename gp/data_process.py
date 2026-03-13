@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-import ast
+import ast, random
+from config import SUBSET_SIZE
 
 from pathlib import Path
 
@@ -32,3 +33,14 @@ def get_data() -> list[list[str], np.array]:
     #y = np.array(df['expected_output'].tolist())
     
     return [x,y]
+
+def sample_data(data: list[list[str], np.array]) -> list[list[str], np.array]:
+    inputs, outputs = data
+
+    indicies = random.sample(range(len(inputs)), SUBSET_SIZE)
+
+    sampled_inputs = [inputs[i] for i in indicies]
+    sampled_ouputs = [outputs[i] for i in indicies]
+
+    return [sampled_inputs, sampled_ouputs]
+            

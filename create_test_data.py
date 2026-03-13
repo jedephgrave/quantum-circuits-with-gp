@@ -3,6 +3,7 @@ import csv
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
+from config import NUMBER_INPUTS, NUM_WIRES
 
 #important = ['000', '001', '010', '011', '100', '101', '110', '111', '+++', '+00', '0+0', '00+']
 
@@ -121,7 +122,7 @@ def generate_qft_dataset(
 
 if __name__ == "__main__":
     generate_qft_dataset(
-        n_qubits=3,      
-        n_inputs=20,    
+        n_qubits=NUM_WIRES,      
+        n_inputs=NUMBER_INPUTS,    
         output_csv="data/test_data.csv"
     )
