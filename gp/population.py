@@ -9,6 +9,7 @@ class Population:
         self.members = members
         self.size = len(members)
         self.fitnesses = []
+        self.noisieness = [] 
         
     def add_member(self, circuit: Circuit):
         if self.size == POPULATION_SIZE:
@@ -18,18 +19,35 @@ class Population:
         self.size += 1
         
     @property
-    def fitnesses(self) -> list[int]:
+    def fitnesses(self) -> list[float]:
         return self._fitnesses
     
     @fitnesses.setter
-    def fitnesses(self, fitnesses: list[int]):
+    def fitnesses(self, fitnesses: list[float]):
         if fitnesses and len(fitnesses) != self.size:
             raise ValueError(f"List of size {self.size} expected, size of {len(fitnesses)} given.")
         
+        for i in range(len(self.members)):
+            self.members[i].fitness = fitnesses[i]
+        
         self._fitnesses = fitnesses
         
+    @property
+    def noisieness(self) -> list[float]:
+        return self._noisieness
+    
+    @noisieness.setter
+    def noisieness(self, noisieness: list[float]):
+        if noisieness and len(noisieness) != self.size:
+            raise ValueError(f"List of size {self.size} expected, size of {len(noisieness)} given.")
+        
+        for i in range(len(self.members)):
+            self.members[i].noise = noisieness[i]
+        
+        self._noisieness = noisieness
+        
     def member(self, index: int):
-        if index >= self.size:
+        if index >= self.size or index < 0:
             return ValueError(f"Index between 0 and {self.size-1} expected, index of value {index} given.") 
         
         return self.members[index]

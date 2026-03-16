@@ -23,7 +23,29 @@ def selection(population: Population):
             
     return best_circuit
 
-
+def pareto_tournament_selection(population: Population):
+    # select based on tournament size and pareto dominance
+    
+    sample = population.sample_population(TOURNAMENT_SIZE)
+    best = sample.member(0)
+    
+    for i in range(1, TOURNAMENT_SIZE):
+        candidate = sample.member(i)
+        
+        if dominates(candidate, best):
+            best = candidate
+        elif dominates(best, candidate):
+            continue
+        else:
+            # tie break - p% to compare fitness, (100-p)% to compare noise
+            if random.random() < 0.80:
+                if candidate.fitness > best.fitness:
+                    best = candidate
+            else:
+                if candidate.noise > best.noise:
+                    best = candidate
+                    
+    return best
 
 # for minimising fitness function - depends on it
 # LEGACY
@@ -44,6 +66,12 @@ def selection_min(population: Population):
             best_circuit = member_circuit
             
     return best_circuit
+
+def dominates(circuit_one: Circuit, circuit_two: Circuit):
+    not_worse = (circuit_one.fitness >= circuit_two.fitness) and (circuit_one.noise >= circuit_two.noise)
+    one_better = (circuit_one.fitness > circuit_two.fitness) or (circuit_one.noise > circuit_two.noise)
+    
+    return not_worse and one_better
  
 def crossover(parent_one: Circuit, parent_two: Circuit) -> list[Circuit]:
     #pick two random points (one on each circuit)

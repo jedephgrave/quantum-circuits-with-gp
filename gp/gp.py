@@ -9,12 +9,20 @@ from .data_process import get_data, sample_data
 import random, csv
 import numpy as np
 
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from qiskit_aer.noise import NoiseModel, depolarizing_error
+from qiskit.primitives import StatevectorSampler
+from qiskit.quantum_info import Statevector, DensityMatrix, state_fidelity
+
 def evolution() -> Population:
     
     with open(r'data/fitness_output.csv', 'w') as f:
-        titles = ['gen', 'average', 'best', 'numgood', 'mean_size', 'median_size', '10_percentile_size', '90_percentile_size']
+        titles = ['gen', 'average', 'best', 'numgood', 'mean_size', 'median_size', '10_percentile_size', '90_percentile_size', 'noise_resilience']
         writer = csv.writer(f)
         writer.writerow(titles)
+        
+    
         
     """
     with open(r'data/all_genome_fitnesses.csv', 'w') as f:
@@ -49,6 +57,7 @@ def evolution() -> Population:
         cf.makeqiskitcircuits()
         cf.makefitness(data)
         population.fitnesses = cf.fitnesses
+        population.noisieness = cf.noisieness
         
         """
         with open(r'data/all_genome_fitnesses.csv', 'a') as f:
@@ -57,6 +66,11 @@ def evolution() -> Population:
                 row = [fitness]
                 writer.writerow(row)
         """
+        
+        # measure noise resilience on best in population
+        best_circuit = population.get_best(1)[0]
+        noise = noise_reslience(best_circuit)
+        
             
         best_fitness_sofar = max(population.fitnesses)
         mean_fitness_sofar = np.mean(population.fitnesses)
@@ -92,7 +106,6 @@ def evolution() -> Population:
                 children = insertion(parent_one, parent_two)
                 next_population.add_member(children[0])
                 next_population.add_member(children[1])
-                print("insert")
                 
             elif r < CUMULATIVE_PROB['mutation']:
                 parent = selection(population)
@@ -111,7 +124,6 @@ def evolution() -> Population:
                 child = insert_mutation(parent)
                 
                 next_population.add_member(child)
-                print("insert mutation")
                 
             else: # shrink mutation
                 parent = selection(population)
@@ -134,7 +146,7 @@ def evolution() -> Population:
         
         # write data to csv file 
         with open(r'data/fitness_output.csv', 'a') as f:
-            row = [num_gen+1, mean_fitness_sofar, best_fitness_sofar, valid_circuit_count, average_circuit_length, median_circuit_length, lower_percentile_length, upper_percentile_length]
+            row = [num_gen+1, mean_fitness_sofar, best_fitness_sofar, valid_circuit_count, average_circuit_length, median_circuit_length, lower_percentile_length, upper_percentile_length, noise]
             writer = csv.writer(f)
             writer.writerow(row)
     
@@ -170,5 +182,37 @@ def evolution() -> Population:
     return population
 
 
+def noise_reslience(circuit: Circuit):
+    
+    qc = circuit.qiskit_representation
+    input_state = Statevector.from_label('000')
+    
+    # compute standard output
+    output_state = input_state.evolve(qc)
+    
+    noise_model = NoiseModel()
+    error_oneq = depolarizing_error(0.001, 1)
+    error_twoq = depolarizing_error(0.01, 2)
+    
+    noise_model.add_all_qubit_quantum_error(error_oneq, ['h','x'])
+    noise_model.add_all_qubit_quantum_error(error_twoq, ['cp', 'swap'])
+    
+    noise_simulator = AerSimulator(method="density_matrix", noise_model=noise_model)
     
     
+    
+    qc_dm = QuantumCircuit(qc.num_qubits)
+    qc_dm.initialize(input_state.data, range(qc.num_qubits))
+
+    qc_dm.compose(qc, inplace=True)
+
+    qc_dm.save_density_matrix()
+
+    tqc = transpile(qc_dm, noise_simulator)
+    result = noise_simulator.run(tqc).result()
+
+    noisy_output_state = DensityMatrix(result.data(0)['density_matrix'])
+    
+    fidelity = state_fidelity(output_state, noisy_output_state)
+
+    return fidelity

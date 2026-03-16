@@ -42,8 +42,8 @@ MUTANT_SHRINK_SIZE = {'max': 2,
                       'min': 1
                       }
 
-PROB_DICT = {'crossover' : 0.50,
-             'insertion': 0.0,
+PROB_DICT = {'crossover' : 0.0,
+             'insertion': 0.5,
              'mutation': 0.05,
              'wire_mutation': 0.4,
              'insert_mutation': 0.0,
@@ -73,7 +73,7 @@ SUBSET_SIZE = int(SUBSET_PROPORTION * NUMBER_INPUTS)
 
 # bloat control values
 
-PARSIMONY_CONSTANT = 0.0035 # change to 0.003
+PARSIMONY_CONSTANT = 0.003 # change to 0.003
 
 NOISE_RESILIENCE = False
 

@@ -11,6 +11,9 @@ class Circuit:
         
         self.qiskit_representation = None
         
+        self.fitness = 0
+        self.noise = 0
+        
     def add_gate(self, gate: Gate):
         self.circuit.append(gate)
         self.length += 1

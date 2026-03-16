@@ -131,6 +131,7 @@ def parsimony_pressure(fitness: float, circuit: Circuit):
     
     return adjusted_fitness
     
+"""
 def test_evaluation(expected, output_state):
     candidate = output_state.data
     target = expected
@@ -157,3 +158,4 @@ def test_evaluation(expected, output_state):
     w_fid = 0.3
 
     return (w_amp * F_amp + w_phase * F_phase + w_fid * F_fid)
+"""
