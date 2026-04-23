@@ -10,7 +10,6 @@ test_features.py
 
 # Data files
 data/*
-temp_data/*
 
 # Plot files
 plots/*

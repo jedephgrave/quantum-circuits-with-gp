@@ -82,8 +82,8 @@ def compute_noisy_output(qc, in_qubits):
     error_oneq = depolarizing_error(0.001, 1)
     error_twoq = depolarizing_error(0.01, 2)
     
-    noise_model.add_all_qubit_quantum_error(error_oneq, ['h','x'])
-    noise_model.add_all_qubit_quantum_error(error_twoq, ['cp', 'swap'])
+    noise_model.add_all_qubit_quantum_error(error_oneq, ['h','x','y','z','s'])
+    noise_model.add_all_qubit_quantum_error(error_twoq, ['cp','swap', 'cx','cz','cs'])
     
     noise_simulator = AerSimulator(method="density_matrix", noise_model=noise_model)
     

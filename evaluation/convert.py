@@ -11,7 +11,10 @@ class QiskitBuilder:
         self.gates = {
             "H": self.hadamard,
             "CN": self.cnot,
+            "CZ": self.czed,
             "X": self.paulix,
+            "Y": self.pauliy,
+            "Z": self.pauliz,
             "SWAP": self.swapgate,
             "S": self.sgate,
             "CS": self.cs,
@@ -36,9 +39,18 @@ class QiskitBuilder:
     
     def cnot(self, wires: list[int]):
         self.qc.cx(wires[0], wires[1])
+        
+    def czed(self, wires: list[int]):
+        self.qc.cz(wires[0], wires[1])
 
     def paulix(self, wires: list[int]):
         self.qc.x(wires[0])
+        
+    def pauliy(self, wires: list[int]):
+        self.qc.y(wires[0])
+        
+    def pauliz(self, wires: list[int]):
+        self.qc.z(wires[0])
         
     def swapgate(self, wires: list[int]):
         self.qc.swap(wires[0], wires[1])

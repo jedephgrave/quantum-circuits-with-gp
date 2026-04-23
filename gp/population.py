@@ -8,7 +8,7 @@ class Population:
     def __init__(self, members: list[Circuit]):
         self.members = members
         self.size = len(members)
-        self.fitnesses = []
+        self.fitnesses = [None] * self.size
         self.noisieness = [] 
         
     def add_member(self, circuit: Circuit):

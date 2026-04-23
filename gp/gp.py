@@ -18,20 +18,18 @@ from qiskit.quantum_info import Statevector, DensityMatrix, state_fidelity
 def evolution() -> Population:
     
     with open(r'data/fitness_output.csv', 'w') as f:
-        titles = ['gen', 'average', 'best', 'numgood', 'mean_size', 'median_size', '10_percentile_size', '90_percentile_size', 'noise_resilience']
+        titles = ['gen', 'average', 'best', 'numgood', 'mean_size', 'median_size', '10_percentile_size', '90_percentile_size', 'best_noise', 'avg_noise']
         writer = csv.writer(f)
         writer.writerow(titles)
         
     
         
-    """
     with open(r'data/all_genome_fitnesses.csv', 'w') as f:
             titles = ['fitness']
             writer = csv.writer(f)
             writer.writerow(titles)
-    """
     
-    valid_circuit_set = set()
+    valid_circuit_set = []
     
     # initialisation 
     population = init_population()
@@ -59,17 +57,13 @@ def evolution() -> Population:
         population.fitnesses = cf.fitnesses
         population.noisieness = cf.noisieness
         
-        """
         with open(r'data/all_genome_fitnesses.csv', 'a') as f:
             writer = csv.writer(f)
             for fitness in population.fitnesses:
                 row = [fitness]
                 writer.writerow(row)
-        """
         
         # measure noise resilience on best in population
-        best_circuit = population.get_best(1)[0]
-        noise = noise_reslience(best_circuit)
         
             
         best_fitness_sofar = max(population.fitnesses)
@@ -78,13 +72,15 @@ def evolution() -> Population:
         median_circuit_length = np.percentile(population.get_lengths(), 50)
         lower_percentile_length = np.percentile(population.get_lengths(), 10)
         upper_percentile_length = np.percentile(population.get_lengths(), 90)
+        best_noise_resilience = max(population.noisieness)
+        mean_noise_sofar = np.mean(population.noisieness)
         
         
         valid_circuit_count = 0
         for circuit, fitness in zip(population.members, population.fitnesses):
             if fitness > SUCCESS_VALUE:
                 valid_circuit_count += 1
-                valid_circuit_set.add(circuit)
+                valid_circuit_set.append(circuit)
         
         next_population = Population([])
         
@@ -146,7 +142,7 @@ def evolution() -> Population:
         
         # write data to csv file 
         with open(r'data/fitness_output.csv', 'a') as f:
-            row = [num_gen+1, mean_fitness_sofar, best_fitness_sofar, valid_circuit_count, average_circuit_length, median_circuit_length, lower_percentile_length, upper_percentile_length, noise]
+            row = [num_gen+1, mean_fitness_sofar, best_fitness_sofar, valid_circuit_count, average_circuit_length, median_circuit_length, lower_percentile_length, upper_percentile_length, best_noise_resilience, mean_noise_sofar]
             writer = csv.writer(f)
             writer.writerow(row)
     
@@ -165,8 +161,9 @@ def evolution() -> Population:
     
     for circuit, fitness in zip(population.members, population.fitnesses):
         if fitness > SUCCESS_VALUE:
-            valid_circuit_set.add(circuit)
+            valid_circuit_set.append(circuit)
             
+    # check and add valid circuits to data
     with open('data/found_circuits.txt', 'w') as f:
         for c in valid_circuit_set:
             f.write(f"{str(c)}\n") 
