@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def main_plots():
-    df = pd.read_csv("data/fitness_output.csv")
+    df = pd.read_csv("saved_data/4/fitness_output.csv")
 
     x = df.iloc[:, 0]
     y1 = df.iloc[:, 1]

@@ -9,6 +9,8 @@ import numpy as np
 from circuit import Circuit
 from config import PARSIMONY_CONSTANT, NOISE_RESILIENCE
 import random
+from gp.data_process import get_data
+from config import SUCCESS_VALUE
 
 class CircuitFitness:
     def __init__(self, population: Population):
@@ -64,6 +66,12 @@ class CircuitFitness:
         # self.inputqubits = inputqubits
         for circuit in self.circuits:
             fitness, noise = self.evaluatecircuit(circuit, data)
+            
+            # if suspected perfect circuit - check again on all data 
+            if fitness > SUCCESS_VALUE: 
+                complete_data = get_data()
+                fitness, noise = self.evaluatecircuit(circuit, complete_data)
+                
             self.fitnesses.append(fitness)
             self.noisieness.append(noise)
             

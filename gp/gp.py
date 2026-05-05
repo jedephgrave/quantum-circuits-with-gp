@@ -1,6 +1,6 @@
 # representation [[gate, wires, params], ...]
 
-from config import NUM_GENERATIONS, CUMULATIVE_PROB, build_cumulative_prob, ELITE_COUNT, SUBSET_PROPORTION, SUCCESS_VALUE
+from config import NUM_GENERATIONS, CUMULATIVE_PROB, build_cumulative_prob, ELITE_COUNT, SUBSET_PROPORTION, SUCCESS_VALUE, PARSIMONY_CONSTANT
 from .initialisation import init_population
 from evaluation import CircuitFitness
 from .operations import *
@@ -78,7 +78,8 @@ def evolution() -> Population:
         
         valid_circuit_count = 0
         for circuit, fitness in zip(population.members, population.fitnesses):
-            if fitness > SUCCESS_VALUE:
+            perfect_value = (0.9999 - (PARSIMONY_CONSTANT*circuit.length)) * 0.999
+            if fitness > perfect_value:
                 valid_circuit_count += 1
                 valid_circuit_set.append(circuit)
         
@@ -160,7 +161,8 @@ def evolution() -> Population:
     
     
     for circuit, fitness in zip(population.members, population.fitnesses):
-        if fitness > SUCCESS_VALUE:
+        perfect_value = (0.9999 - (PARSIMONY_CONSTANT*circuit.length)) * 0.999
+        if fitness >= perfect_value:
             valid_circuit_set.append(circuit)
             
     # check and add valid circuits to data
